@@ -5,7 +5,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AutoTarg</title>
+  <title>Nowe ogłoszenie | AutoTarg</title>
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
@@ -16,33 +16,39 @@
 
   <style>
     body {
-      background: #f8f9fa;
+      background-color: #f8f9fa;
+      padding-top: 56px;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
 
-    nav.navbar {
-      background-color: #343a40;
+    main {
+      flex: 1;
+      padding: 2rem 0;
+      min-height: 100vh;
     }
 
-    nav.navbar .navbar-brand {
-      color: #fff;
+    .form-container {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 0.5rem;
+      box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    label {
       font-weight: 600;
     }
 
-    nav.navbar .navbar-brand:hover {
-      color: #adb5bd;
-      text-decoration: none;
+    textarea.form-control {
+      resize: vertical;
+      min-height: 120px;
     }
 
-    main {
-      flex-grow: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 2rem;
-      min-height: 100vh;
+    .btn-success {
+      min-width: 50%;
     }
   </style>
 </head>
@@ -84,39 +90,54 @@
     </div>
   </nav>
 
-  <main class="container my-5 d-flex flex-column">
-    <h1 class="text-center mb-5">
-      Witaj, <span sec:authentication="principal.username">User</span>!
-    </h1>
+  <main>
+    <div class="form-container">
+      <h1 class="mb-4 text-center">Dodaj ogłoszenie</h1>
+      <form th:action="@{/listings}" th:object="${listingDto}" method="post" enctype="multipart/form-data" novalidate>
+        <div class="mb-3">
+          <label for="title" class="form-label">Tytuł</label>
+          <input id="title" th:field="*{title}" type="text" class="form-control" placeholder="Wpisz tytuł ogłoszenia"
+            required />
+        </div>
+        <div class="mb-3">
+          <label for="description" class="form-label">Opis</label>
+          <textarea id="description" th:field="*{description}" class="form-control" placeholder="Opisz samochód"
+            required></textarea>
+        </div>
 
-    <div class="row justify-content-center g-4">
-      <div class="col-md-4">
-        <a th:href="@{/listings}" class="text-decoration-none">
-          <div class="card text-white bg-primary h-100 shadow-sm">
-            <div class="card-body d-flex flex-column justify-content-center align-items-center">
-              <i class="bi bi-card-list fs-1 mb-3"></i>
-              <h5 class="card-title">Wyświetl ogłoszenia</h5>
-              <p class="card-text text-center">
-                Przeglądaj wszystkie dostępne ogłoszenia.
-              </p>
-            </div>
+        <div class="mb-3">
+          <label for="price" class="form-label">Cena</label>
+          <div class="input-group">
+            <input id="price" th:field="*{price}" type="number" step="0.01" min="0" class="form-control"
+              placeholder="Podaj cenę" required />
+            <span class="input-group-text">PLN</span>
           </div>
-        </a>
-      </div>
+        </div>
 
-      <div class="col-md-4">
-        <a th:href="@{/listings/new}" class="text-decoration-none">
-          <div class="card text-white bg-success h-100 shadow-sm">
-            <div class="card-body d-flex flex-column justify-content-center align-items-center">
-              <i class="bi bi-plus-circle fs-1 mb-3"></i>
-              <h5 class="card-title">Dodaj ogłoszenie</h5>
-              <p class="card-text text-center">
-                Dodaj nowe ogłoszenie sprzedaży samochodu.
-              </p>
-            </div>
+        <div class="mb-3">
+          <label for="address" class="form-label">Adres</label>
+          <input id="address" th:field="*{address}" type="text" class="form-control"
+            placeholder="Podaj adres" required />
+        </div>
+
+        <div class="mb-3">
+          <label for="image" class="form-label">Zdjęcie</label>
+          <input id="image" th:field="*{image}" type="file" class="form-control" accept="image/*" />
+        </div>
+
+        <div class="mb-4">
+          <label for="phoneNumber" class="form-label">Numer telefonu</label>
+          <div class="input-group">
+            <span class="input-group-text">+48</span>
+            <input id="phoneNumber" th:field="*{phoneNumber}" type="tel" class="form-control"
+              placeholder="Podaj numer telefonu" required />
           </div>
-        </a>
-      </div>
+        </div>
+
+        <div class="d-flex justify-content-center">
+          <button type="submit" class="btn btn-success btn-lg">Zapisz</button>
+        </div>
+      </form>
     </div>
   </main>
 
@@ -137,7 +158,6 @@
       </div>
     </div>
   </footer>
-
 </body>
 
 </html>
